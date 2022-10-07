@@ -4,16 +4,22 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.hardware.Camera;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ToggleButton;
+
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements GestureDetector.OnGestureListener {
     ToggleButton simpleToggleButton;
     boolean isOn = false;
     Camera camera;
     private GestureDetector detector;
+    EditText ed;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,6 +27,8 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         simpleToggleButton = (ToggleButton) findViewById(R.id.simpleToggleButton);
         camera = Camera.open();
         detector = new GestureDetector(this,this);
+        ed = findViewById(R.id.edittext);
+
         simpleToggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -37,6 +45,27 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                    camera.setParameters(param);
                    camera.stopPreview();
                }
+            }
+        });
+        ed.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (charSequence.toString().toLowerCase().equals("on")){
+                    simpleToggleButton.setChecked(true);
+                }
+                else if (charSequence.toString().toLowerCase().equals("off")){
+                    simpleToggleButton.setChecked(false);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
             }
         });
     }
